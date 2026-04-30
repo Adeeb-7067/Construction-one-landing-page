@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Package, Truck, ShieldCheck, Sparkles, ArrowRight } from "lucide-react";
+import { useLandingData } from "@/hooks/useLandingData";
 
 const pillars = [
   {
@@ -29,6 +30,9 @@ const pillars = [
 ];
 
 export const AboutPlatform = () => {
+  const { data } = useLandingData();
+  const company = data?.company;
+
   return (
     <section id="about" className="relative py-32">
       <div className="mx-auto max-w-7xl px-6">
@@ -40,13 +44,24 @@ export const AboutPlatform = () => {
         >
           <p className="mb-4 text-xs tracking-[0.3em] text-primary">ABOUT THE PLATFORM</p>
           <h2 className="font-display text-4xl font-bold leading-tight md:text-6xl">
-            One marketplace.{" "}
-            <span className="text-gradient">Every building material.</span>
+            {company?.title ? (
+              <>
+                {company.title.includes(" ") ? (
+                  <>
+                    {company.title.split(" ").slice(0, -2).join(" ")} <span className="text-gradient">{company.title.split(" ").slice(-2).join(" ")}</span>
+                  </>
+                ) : (
+                  <span className="text-gradient">{company.title}</span>
+                )}
+              </>
+            ) : (
+              <>
+                One marketplace. <span className="text-gradient">Every building material.</span>
+              </>
+            )}
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-muted-foreground">
-            Construction One is India's online marketplace for construction materials.
-            We don't build your project — we make sure every brick, bag and bar reaches your site
-            on time, at the right price, from suppliers you can trust.
+            {company?.paragraph || "Construction One is India's online marketplace for construction materials. We don't build your project — we make sure every brick, bag and bar reaches your site on time, at the right price, from suppliers you can trust."}
           </p>
         </motion.div>
 
@@ -62,7 +77,9 @@ export const AboutPlatform = () => {
           >
             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary to-accent opacity-90 blur-2xl" />
             <div className="relative flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-primary-foreground shadow-[0_0_60px_var(--glow)]">
-              <span className="font-display text-xs font-bold uppercase tracking-[0.2em]">C1</span>
+              <span className="font-display text-xs font-bold uppercase tracking-[0.2em]">
+                {company?.name ? company.name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase() : "C1"}
+              </span>
             </div>
           </motion.div>
 

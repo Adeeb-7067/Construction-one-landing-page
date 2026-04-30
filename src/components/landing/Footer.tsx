@@ -1,10 +1,19 @@
 import { motion } from "framer-motion";
 import logo from "@/assets/logo.png";
 import { useLandingData } from "@/hooks/useLandingData";
+import { Facebook, Twitter, Instagram, Linkedin, Youtube } from "lucide-react";
 
 export const Footer = () => {
   const { data } = useLandingData();
   const company = data?.company;
+
+  const socialIcons: Record<string, any> = {
+    facebook: Facebook,
+    twitter: Twitter,
+    instagram: Instagram,
+    linkedin: Linkedin,
+    youtube: Youtube,
+  };
 
   return (
     <footer className="relative mt-20 border-t border-border py-14">
@@ -25,6 +34,26 @@ export const Footer = () => {
             <p className="mt-4 max-w-sm text-sm text-muted-foreground">
               {company?.paragraph || "India's trusted marketplace for construction materials. Cement, steel, bricks, sand and more — from verified vendors, delivered to your site."}
             </p>
+            
+            {company?.socialMedia && Object.keys(company.socialMedia).length > 0 && (
+              <div className="mt-6 flex items-center gap-4">
+                {Object.entries(company.socialMedia).map(([platform, url]) => {
+                  const Icon = socialIcons[platform.toLowerCase()];
+                  if (!Icon || !url) return null;
+                  return (
+                    <a 
+                      key={platform} 
+                      href={url as string} 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      <Icon className="h-5 w-5" />
+                    </a>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           <div>

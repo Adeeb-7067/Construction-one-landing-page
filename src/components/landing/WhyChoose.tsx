@@ -1,34 +1,38 @@
 import { motion } from "framer-motion";
 import { Zap, BadgeCheck, IndianRupee, Headphones } from "lucide-react";
-
-const reasons = [
-  {
-    icon: Zap,
-    title: "Quick delivery",
-    stat: "24–48h",
-    desc: "Materials reach most pin codes within 24–48 hours of order confirmation.",
-  },
-  {
-    icon: BadgeCheck,
-    title: "Verified suppliers",
-    stat: "1,000+",
-    desc: "Every vendor is GST-verified, with documents and track record reviewed by our team.",
-  },
-  {
-    icon: IndianRupee,
-    title: "Best landed price",
-    stat: "Up to 18% off",
-    desc: "Live price comparison, bulk-buy discounts and zero-haggle pricing.",
-  },
-  {
-    icon: Headphones,
-    title: "Real human support",
-    stat: "7AM–10PM",
-    desc: "Order placed at 8PM? Our procurement desk picks up before you finish your tea.",
-  },
-];
+import { useLandingData } from "@/hooks/useLandingData";
 
 export const WhyChoose = () => {
+  const { data } = useLandingData();
+  const stats = data?.stats;
+
+  const reasons = [
+    {
+      icon: Zap,
+      title: "Quick delivery",
+      stat: "24–48h",
+      desc: "Materials reach most pin codes within 24–48 hours of order confirmation.",
+    },
+    {
+      icon: BadgeCheck,
+      title: "Verified Vendors",
+      stat: stats?.totalVerifiedVendors ? `${stats.totalVerifiedVendors.toLocaleString()}+` : "1,000+",
+      desc: "Every vendor is GST-verified, with documents and track record reviewed by our team.",
+    },
+    {
+      icon: IndianRupee,
+      title: "Best landed price",
+      stat: "Up to 18% off",
+      desc: "Live price comparison, bulk-buy discounts and zero-haggle pricing.",
+    },
+    {
+      icon: Headphones,
+      title: "Real human support",
+      stat: "7AM–10PM",
+      desc: "Order placed at 8PM? Our procurement desk picks up before you finish your tea.",
+    },
+  ];
+
   return (
     <section id="why" className="relative py-32">
       <div className="absolute inset-0 grid-pattern opacity-40" />

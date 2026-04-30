@@ -1,36 +1,44 @@
 import { motion } from "framer-motion";
 import { Mail, Phone, MessageCircle, MapPin, Apple, Smartphone } from "lucide-react";
-
-const channels = [
-  {
-    icon: Mail,
-    label: "Email us",
-    value: "hello@constructionone.in",
-    href: "mailto:hello@constructionone.in",
-  },
-  {
-    icon: Phone,
-    label: "Call us",
-    value: "+91 80000 00000",
-    href: "tel:+918000000000",
-    sub: "Mon–Sat • 7AM – 10PM",
-  },
-  {
-    icon: MessageCircle,
-    label: "WhatsApp",
-    value: "+91 80000 00000",
-    href: "https://wa.me/918000000000",
-    sub: "Fastest response",
-  },
-  {
-    icon: MapPin,
-    label: "Office",
-    value: "Construction One HQ",
-    sub: "Bengaluru, Karnataka 560001",
-  },
-];
+import { useLandingData } from "@/hooks/useLandingData";
 
 export const Contact = () => {
+  const { data } = useLandingData();
+  const company = data?.company;
+
+  const channels = [
+    {
+      icon: Mail,
+      label: "Email us",
+      value: company?.email || "hello@constructionone.in",
+      href: company?.email ? `mailto:${company.email}` : "mailto:hello@constructionone.in",
+    },
+    {
+      icon: Phone,
+      label: "Call us",
+      value: company?.phone || "+91 80000 00000",
+      href: company?.phone ? `tel:${company.phone}` : "tel:+918000000000",
+      sub: "Mon–Sat • 7AM – 10PM",
+    },
+    {
+      icon: MessageCircle,
+      label: "WhatsApp",
+      value: company?.whatsapp || company?.phone || "+91 80000 00000",
+      href: company?.whatsapp 
+        ? `https://wa.me/${company.whatsapp.replace(/\D/g, '')}` 
+        : company?.phone 
+          ? `https://wa.me/${company.phone.replace(/\D/g, '')}`
+          : "https://wa.me/918000000000",
+      sub: "Fastest response",
+    },
+    {
+      icon: MapPin,
+      label: "Office",
+      value: company?.name || "Construction One HQ",
+      sub: company?.officeAddress || "Bengaluru, Karnataka 560001",
+    },
+  ];
+
   return (
     <section id="contact" className="relative py-32">
       <div className="mx-auto max-w-7xl px-6">
@@ -55,8 +63,8 @@ export const Contact = () => {
                   <Icon className="h-5 w-5" />
                 </div>
                 <div className="text-xs uppercase tracking-wider text-muted-foreground">{c.label}</div>
-                <div className="mt-1 font-display text-base font-semibold">{c.value}</div>
-                {c.sub && <div className="mt-1 text-xs text-muted-foreground">{c.sub}</div>}
+                <div className="mt-1 font-display text-base font-semibold line-clamp-1">{c.value}</div>
+                {c.sub && <div className="mt-1 text-xs text-muted-foreground line-clamp-1">{c.sub}</div>}
               </>
             );
             return (
@@ -95,14 +103,20 @@ export const Contact = () => {
             </p>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            <button className="flex items-center gap-3 rounded-2xl bg-primary px-6 py-3.5 text-primary-foreground transition-all hover:shadow-[0_0_40px_var(--glow)]">
+            <button 
+              onClick={() => company?.appLinks?.appStore && window.open(company.appLinks.appStore, "_blank")}
+              className="flex items-center gap-3 rounded-2xl bg-primary px-6 py-3.5 text-primary-foreground transition-all hover:shadow-[0_0_40px_var(--glow)]"
+            >
               <Apple className="h-5 w-5" />
               <div className="text-left">
                 <div className="text-[10px] opacity-80">Download on</div>
                 <div className="text-sm font-semibold">App Store</div>
               </div>
             </button>
-            <button className="flex items-center gap-3 rounded-2xl glass-strong px-6 py-3.5 hover:bg-white/10 transition-colors">
+            <button 
+              onClick={() => company?.appLinks?.playStore && window.open(company.appLinks.playStore, "_blank")}
+              className="flex items-center gap-3 rounded-2xl glass-strong px-6 py-3.5 hover:bg-white/10 transition-colors"
+            >
               <Smartphone className="h-5 w-5" />
               <div className="text-left">
                 <div className="text-[10px] opacity-80">Get it on</div>
