@@ -1,12 +1,7 @@
 import { motion, useInView, useMotionValue, useTransform, animate } from "framer-motion";
 import { useEffect, useRef } from "react";
+import { useLandingData } from "@/hooks/useLandingData";
 
-const stats = [
-  { label: "Materials Delivered", value: 2400000, suffix: "+", format: "k" },
-  { label: "Verified Vendors", value: 1280, suffix: "+" },
-  { label: "Projects Completed", value: 9450, suffix: "" },
-  { label: "Cities Live", value: 48, suffix: "" },
-];
 
 const Counter = ({ to, suffix, format }: { to: number; suffix: string; format?: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -33,12 +28,22 @@ const Counter = ({ to, suffix, format }: { to: number; suffix: string; format?: 
 };
 
 export const Stats = () => {
+  const { data } = useLandingData();
+  const apiStats = data?.stats;
+
+  const displayStats = [
+    { label: "Orders Delivered", value: apiStats?.totalOrders || 0, suffix: "+", format: "k" },
+    { label: "Verified Vendors", value: apiStats?.totalVerifiedVendors || 0, suffix: "+" },
+    { label: "Total Users", value: apiStats?.totalUsers || 0, suffix: "+" },
+    { label: "Cities Live", value: apiStats?.totalCities || 0, suffix: "" },
+  ];
+
   return (
     <section className="relative border-y border-border py-24">
       <div className="absolute inset-0 grid-pattern opacity-20" />
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((s, i) => (
+          {displayStats.map((s, i) => (
             <motion.div
               key={s.label}
               initial={{ opacity: 0, y: 20 }}

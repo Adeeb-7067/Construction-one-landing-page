@@ -1,18 +1,31 @@
 import { motion } from "framer-motion";
+import { useLandingData } from "@/hooks/useLandingData";
 
-const categories = [
-  { emoji: "🧱", label: "Cement", count: "120+ brands" },
-  { emoji: "🔩", label: "TMT Steel", count: "30+ brands" },
-  { emoji: "🟫", label: "Bricks & Blocks", count: "AAC • Red • Fly-ash" },
-  { emoji: "🪨", label: "Sand & Aggregate", count: "M-Sand • River" },
-  { emoji: "🟦", label: "Tiles & Marble", count: "10,000+ SKUs" },
-  { emoji: "🎨", label: "Paints", count: "Asian • Berger • Dulux" },
-  { emoji: "🚿", label: "Plumbing", count: "Pipes • Fittings" },
-  { emoji: "⚡", label: "Electrical", count: "Wires • Switches" },
-  { emoji: "🛠️", label: "Tools", count: "Power • Hand" },
-];
 
 export const Categories = () => {
+  const { data } = useLandingData();
+
+  const apiCategories = data?.categories || [];
+  const apiPcategories = data?.pcategories || [];
+  const allCategories = [...apiPcategories, ...apiCategories];
+
+  const displayCategories = allCategories.length > 0 
+    ? [
+        ...apiPcategories.map(c => ({
+          id: c.id,
+          img: c.img,
+          label: c.name,
+          count: "Parent Category",
+        })),
+        ...apiCategories.map(c => ({
+          id: c.id,
+          img: c.img,
+          label: c.name,
+          count: "Category",
+        }))
+      ]
+    : [];
+
   return (
     <section className="relative py-20">
       <div className="mx-auto max-w-7xl px-6">
@@ -31,9 +44,9 @@ export const Categories = () => {
         </motion.div>
 
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-9">
-          {categories.map((c, i) => (
+          {displayCategories.map((c, i) => (
             <motion.button
-              key={c.label}
+              key={c.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -44,8 +57,14 @@ export const Categories = () => {
                 document.getElementById("marketplace")?.scrollIntoView({ behavior: "smooth" });
               }}
             >
-              <div className="text-3xl transition-transform group-hover:scale-110">{c.emoji}</div>
-              <div className="text-xs font-semibold leading-tight">{c.label}</div>
+              {c.img ? (
+                <div className="h-10 w-10 overflow-hidden rounded-full transition-transform group-hover:scale-110 bg-background flex items-center justify-center p-1">
+                  <img src={c.img} alt={c.label} className="h-full w-full object-contain" />
+                </div>
+              ) : (
+                <div className="text-3xl transition-transform group-hover:scale-110">{c.emoji}</div>
+              )}
+              <div className="text-xs font-semibold leading-tight line-clamp-2">{c.label}</div>
               <div className="text-[10px] leading-tight text-muted-foreground">{c.count}</div>
             </motion.button>
           ))}

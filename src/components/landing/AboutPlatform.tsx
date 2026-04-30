@@ -88,9 +88,6 @@ export const AboutPlatform = () => {
                     </div>
                     <h3 className="font-display text-lg font-semibold">{p.title}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.desc}</p>
-                    <div className="mt-5 flex items-center gap-1 text-xs font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
-                      Learn more <ArrowRight className="h-3 w-3" />
-                    </div>
                   </div>
                 </motion.div>
               );

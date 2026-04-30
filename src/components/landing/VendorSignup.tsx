@@ -2,11 +2,13 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { Store, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 import { z } from "zod";
-import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { useSellTypes } from "@/hooks/useLandingData";
+import { submitBusinessRequest } from "@/lib/api";
 
 const VendorSchema = z.object({
-  business_name: z.string().trim().min(2, "Business name is required").max(120),
-  contact_name: z.string().trim().min(2, "Your name is required").max(80),
+  businessName: z.string().trim().min(2, "Business name is required").max(120),
+  name: z.string().trim().min(2, "Your name is required").max(80),
   email: z.string().trim().email("Enter a valid email").max(255),
   phone: z
     .string()
@@ -15,34 +17,26 @@ const VendorSchema = z.object({
     .max(20)
     .regex(/^[0-9 +\-()]+$/, "Digits, spaces and + - ( ) only"),
   city: z.string().trim().min(2, "City is required").max(80),
-  category: z.enum([
-    "cement",
-    "steel",
-    "bricks",
-    "sand",
-    "tiles",
-    "plumbing",
-    "electrical",
-    "tools",
-    "paints",
-    "other",
-  ]),
-  message: z.string().trim().max(1000).optional().or(z.literal("")),
+  sellType: z.array(z.string()).min(1, "Select at least one category"),
+  description: z.string().trim().max(1000).optional().or(z.literal("")),
 });
 
 type FormState = z.infer<typeof VendorSchema>;
 
 const initial: FormState = {
-  business_name: "",
-  contact_name: "",
+  businessName: "",
+  name: "",
   email: "",
   phone: "",
   city: "",
-  category: "cement",
-  message: "",
+  sellType: [],
+  description: "",
 };
 
 export const VendorSignup = () => {
+  const { data: sellTypes } = useSellTypes();
+  const availableSellTypes = sellTypes || [];
+
   const [form, setForm] = useState<FormState>(initial);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
@@ -69,23 +63,33 @@ export const VendorSignup = () => {
     }
 
     setStatus("submitting");
-    const { error } = await supabase.from("vendor_signups").insert({
-      business_name: parsed.data.business_name,
-      contact_name: parsed.data.contact_name,
-      email: parsed.data.email,
-      phone: parsed.data.phone,
-      city: parsed.data.city,
-      category: parsed.data.category,
-      message: parsed.data.message || null,
-    });
-
-    if (error) {
+    try {
+      await submitBusinessRequest(parsed.data);
+      setStatus("success");
+      setForm(initial);
+      toast.success("Business request submitted successfully!", {
+        description: "Our vendor team will reach out within 1 business day.",
+      });
+    } catch (error) {
       setStatus("error");
       setServerError("Couldn't submit right now. Please try again in a moment.");
-      return;
+      toast.error("Submission failed", {
+        description: "Please check your network and try again.",
+      });
     }
-    setStatus("success");
-    setForm(initial);
+  };
+
+  const toggleSellType = (id: string) => {
+    setForm((f) => {
+      const isSelected = f.sellType.includes(id);
+      return {
+        ...f,
+        sellType: isSelected
+          ? f.sellType.filter((t) => t !== id)
+          : [...f.sellType, id],
+      };
+    });
+    setErrors((e) => ({ ...e, sellType: undefined }));
   };
 
   return (
@@ -162,19 +166,19 @@ export const VendorSignup = () => {
             ) : (
               <form onSubmit={onSubmit} className="space-y-4" noValidate>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Field label="Business name" error={errors.business_name}>
+                  <Field label="Business name" error={errors.businessName}>
                     <input
-                      value={form.business_name}
-                      onChange={(e) => update("business_name", e.target.value)}
+                      value={form.businessName}
+                      onChange={(e) => update("businessName", e.target.value)}
                       placeholder="UltraSteel Traders"
                       maxLength={120}
                       className={inputCls}
                     />
                   </Field>
-                  <Field label="Your name" error={errors.contact_name}>
+                  <Field label="Your name" error={errors.name}>
                     <input
-                      value={form.contact_name}
-                      onChange={(e) => update("contact_name", e.target.value)}
+                      value={form.name}
+                      onChange={(e) => update("name", e.target.value)}
                       placeholder="Ravi Kumar"
                       maxLength={80}
                       className={inputCls}
@@ -213,29 +217,51 @@ export const VendorSignup = () => {
                       className={inputCls}
                     />
                   </Field>
-                  <Field label="What do you sell?" error={errors.category}>
-                    <select
-                      value={form.category}
-                      onChange={(e) => update("category", e.target.value as FormState["category"])}
-                      className={inputCls}
-                    >
-                      <option value="cement">Cement</option>
-                      <option value="steel">TMT Steel</option>
-                      <option value="bricks">Bricks & Blocks</option>
-                      <option value="sand">Sand & Aggregate</option>
-                      <option value="tiles">Tiles & Marble</option>
-                      <option value="paints">Paints</option>
-                      <option value="plumbing">Plumbing</option>
-                      <option value="electrical">Electrical</option>
-                      <option value="tools">Tools</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </Field>
                 </div>
-                <Field label="Anything else? (optional)" error={errors.message}>
+                <Field label="What do you sell? (Select all that apply)" error={errors.sellType}>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const el = document.getElementById("sellTypeDropdown");
+                        if (el) {
+                           el.style.display = el.style.display === "none" ? "block" : "none";
+                        }
+                      }}
+                      className={`${inputCls} flex items-center justify-between`}
+                    >
+                      <span className={form.sellType.length === 0 ? "text-muted-foreground" : ""}>
+                        {form.sellType.length === 0 
+                          ? "Select categories..." 
+                          : `${form.sellType.length} selected`}
+                      </span>
+                      <svg className={`h-4 w-4 transition-transform opacity-50`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    
+                    <div id="sellTypeDropdown" style={{ display: "none" }} className="absolute z-50 w-full mt-2 bg-background/90 backdrop-blur-xl border border-input rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] max-h-60 overflow-auto p-2">
+                      {availableSellTypes.map((type: any) => (
+                        <label
+                          key={type._id}
+                          className="flex items-center gap-3 px-3 py-2.5 hover:bg-foreground/5 rounded-lg cursor-pointer transition-colors"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={form.sellType.includes(type._id)}
+                            onChange={() => toggleSellType(type._id)}
+                            className="h-4 w-4 rounded border-input bg-background/50 accent-primary"
+                          />
+                          <span className="text-sm font-medium">{type.name}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </Field>
+                <Field label="Anything else? (optional)" error={errors.description}>
                   <textarea
-                    value={form.message}
-                    onChange={(e) => update("message", e.target.value)}
+                    value={form.description}
+                    onChange={(e) => update("description", e.target.value)}
                     placeholder="Daily capacity, brands you stock, delivery range..."
                     maxLength={1000}
                     rows={3}

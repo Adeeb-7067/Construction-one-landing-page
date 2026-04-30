@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { ArrowRight, ShoppingCart, Store, ChevronDown } from "lucide-react";
+import { toast } from "sonner";
 import heroImg from "@/assets/hero-construction.jpg";
 import logo from "@/assets/logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useLandingData } from "@/hooks/useLandingData";
 
 const Particles = () => {
   const particles = Array.from({ length: 30 });
@@ -37,10 +39,12 @@ const RippleButton = ({
   children,
   variant = "primary",
   icon: Icon,
+  onClick,
 }: {
   children: React.ReactNode;
   variant?: "primary" | "ghost";
   icon?: React.ComponentType<{ className?: string }>;
+  onClick?: () => void;
 }) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const btn = e.currentTarget;
@@ -50,6 +54,8 @@ const RippleButton = ({
     ripple.style.cssText = `position:absolute;border-radius:50%;background:currentColor;opacity:.35;pointer-events:none;width:${size}px;height:${size}px;left:${e.clientX - rect.left - size / 2}px;top:${e.clientY - rect.top - size / 2}px;transform:scale(0);animation:ripple .7s ease-out;`;
     btn.appendChild(ripple);
     setTimeout(() => ripple.remove(), 700);
+    
+    if (onClick) onClick();
   };
 
   const base =
@@ -68,7 +74,11 @@ const RippleButton = ({
   );
 };
 
+
 export const Hero = () => {
+  const { data } = useLandingData();
+  const company = data?.company;
+
   return (
     <section className="relative min-h-screen overflow-hidden">
       {/* Background image with parallax-style scale */}
@@ -97,7 +107,11 @@ export const Hero = () => {
         className="relative z-20 mx-auto flex max-w-7xl items-center justify-between px-6 py-6"
       >
         <a href="/" className="flex items-center gap-2">
-          <img src={logo} alt="Construction One" className="h-8 w-auto" />
+          {company?.headerLogo ? (
+            <img src={company.headerLogo} alt={company.name || "Construction One"} className="h-8 w-auto" />
+          ) : (
+            <img src={logo} alt="Construction One" className="h-8 w-auto" />
+          )}
         </a>
         <div className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
           <a className="hover:text-foreground transition-colors" href="#about">About</a>
@@ -108,9 +122,6 @@ export const Hero = () => {
         </div>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <button className="glass rounded-full px-5 py-2 text-sm hover:bg-foreground/10 transition-colors">
-            Sign in
-          </button>
         </div>
       </motion.nav>
 
@@ -123,7 +134,7 @@ export const Hero = () => {
           className="mb-6 inline-flex w-fit items-center gap-2 rounded-full glass px-4 py-1.5 text-xs tracking-wide text-muted-foreground"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-          INDIA'S MARKETPLACE FOR CONSTRUCTION MATERIALS
+          {company?.tagline ? company.tagline.toUpperCase() : "INDIA'S MARKETPLACE FOR CONSTRUCTION MATERIALS"}
         </motion.div>
 
         <motion.h1
@@ -132,11 +143,19 @@ export const Hero = () => {
           transition={{ delay: 0.7, duration: 0.8 }}
           className="font-display text-5xl font-bold leading-[1.05] tracking-tighter md:text-7xl lg:text-[8rem]"
         >
-          Cement.
-          <br />
-          <span className="text-gradient">Steel.</span>
-          <br />
-          Delivered.
+          {company?.title ? (
+            <>
+              {company.title}
+            </>
+          ) : (
+            <>
+              Cement.
+              <br />
+              <span className="text-gradient">Steel.</span>
+              <br />
+              Delivered.
+            </>
+          )}
         </motion.h1>
 
         <motion.p
@@ -145,8 +164,7 @@ export const Hero = () => {
           transition={{ delay: 1, duration: 0.6 }}
           className="mt-8 max-w-xl text-lg text-muted-foreground"
         >
-          Order cement, TMT bars, bricks, sand, tiles and more from verified
-          vendors near you — at the best price, delivered straight to your site.
+          {company?.paragraph || "Order cement, TMT bars, bricks, sand, tiles and more from verified vendors near you — at the best price, delivered straight to your site."}
         </motion.p>
 
         <motion.div
@@ -155,8 +173,19 @@ export const Hero = () => {
           transition={{ delay: 1.2, duration: 0.6 }}
           className="mt-10 flex flex-wrap items-center gap-4"
         >
-          <RippleButton icon={ShoppingCart}>Shop Materials</RippleButton>
-          <RippleButton variant="ghost" icon={Store}>Sell on Construction One</RippleButton>
+          <RippleButton 
+            icon={ShoppingCart} 
+            onClick={() => toast("Coming soon!", { description: "Our shop is currently under construction." })}
+          >
+            Shop Materials
+          </RippleButton>
+          <RippleButton 
+            variant="ghost" 
+            icon={Store}
+            onClick={() => document.getElementById("vendors")?.scrollIntoView({ behavior: "smooth" })}
+          >
+            Sell on Construction One
+          </RippleButton>
         </motion.div>
       </div>
 
