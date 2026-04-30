@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "@tanstack/react-router";
 import { ArrowRight, ShoppingCart, Store, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import heroImg from "@/assets/hero-construction.jpg";
@@ -106,19 +107,19 @@ export const Hero = () => {
         transition={{ delay: 0.3, duration: 0.6 }}
         className="relative z-20 mx-auto flex max-w-7xl items-center justify-between px-6 py-6"
       >
-        <a href="/" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           {company?.headerLogo ? (
             <img src={company.headerLogo} alt={company.name || "Construction One"} className="h-8 w-auto" />
           ) : (
             <img src={logo} alt="Construction One" className="h-8 w-auto" />
           )}
-        </a>
+        </Link>
         <div className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
-          <a className="hover:text-foreground transition-colors" href="#about">About</a>
-          <a className="hover:text-foreground transition-colors" href="#why">Why us</a>
-          <a className="hover:text-foreground transition-colors" href="#marketplace">Marketplace</a>
-          <a className="hover:text-foreground transition-colors" href="#vendors">Sell with us</a>
-          <a className="hover:text-foreground transition-colors" href="#contact">Contact</a>
+          <Link to="/" hash="about" className="hover:text-foreground transition-colors">About</Link>
+          <Link to="/" hash="why" className="hover:text-foreground transition-colors">Why us</Link>
+          <Link to="/" hash="marketplace" className="hover:text-foreground transition-colors">Marketplace</Link>
+          <Link to="/" hash="vendors" className="hover:text-foreground transition-colors">Sell with us</Link>
+          <Link to="/" hash="contact" className="hover:text-foreground transition-colors">Contact</Link>
         </div>
         <div className="flex items-center gap-2">
           <ThemeToggle />

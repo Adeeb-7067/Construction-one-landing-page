@@ -60,18 +60,18 @@ export const Footer = () => {
           <div>
             <div className="mb-3 text-xs font-semibold uppercase tracking-wider text-foreground">Marketplace</div>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="#marketplace" className="hover:text-foreground transition-colors">Browse materials</a></li>
-              <li><a href="#why" className="hover:text-foreground transition-colors">Why Construction One</a></li>
-              <li><a href="#vendors" className="hover:text-foreground transition-colors">Sell with us</a></li>
-              <li><a href="#testimonials" className="hover:text-foreground transition-colors">Success stories</a></li>
+              <li><Link to="/" hash="marketplace" className="hover:text-foreground transition-colors">Browse materials</Link></li>
+              <li><Link to="/" hash="why" className="hover:text-foreground transition-colors">Why Construction One</Link></li>
+              <li><Link to="/" hash="vendors" className="hover:text-foreground transition-colors">Sell with us</Link></li>
+              <li><Link to="/" hash="testimonials" className="hover:text-foreground transition-colors">Success stories</Link></li>
             </ul>
           </div>
 
           <div>
             <div className="mb-3 text-xs font-semibold uppercase tracking-wider text-foreground">Company</div>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="#about" className="hover:text-foreground transition-colors">About</a></li>
-              <li><a href="#contact" className="hover:text-foreground transition-colors">Contact</a></li>
+              <li><Link to="/" hash="about" className="hover:text-foreground transition-colors">About</Link></li>
+              <li><Link to="/" hash="contact" className="hover:text-foreground transition-colors">Contact</Link></li>
               {company?.email ? (
                 <li><a href={`mailto:${company.email}`} className="hover:text-foreground transition-colors">{company.email}</a></li>
               ) : (
@@ -80,7 +80,8 @@ export const Footer = () => {
               {company?.phone && (
                 <li><a href={`tel:${company.phone}`} className="hover:text-foreground transition-colors">Phone: {company.phone}</a></li>
               )}
-              <li><a href="#" className="hover:text-foreground transition-colors">Privacy & Terms</a></li>
+              <li><Link to="/privacy-policy" className="hover:text-foreground transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/terms-conditions" className="hover:text-foreground transition-colors">Terms & Conditions</Link></li>
               <li><Link to="/ban" className="hover:text-foreground transition-colors text-destructive/80 hover:text-destructive">Ban User</Link></li>
             </ul>
           </div>

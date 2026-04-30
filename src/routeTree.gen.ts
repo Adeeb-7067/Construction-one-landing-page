@@ -9,9 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsConditionsRouteImport } from './routes/terms-conditions'
+import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as BanRouteImport } from './routes/ban'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TermsConditionsRoute = TermsConditionsRouteImport.update({
+  id: '/terms-conditions',
+  path: '/terms-conditions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BanRoute = BanRouteImport.update({
   id: '/ban',
   path: '/ban',
@@ -26,31 +38,53 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ban': typeof BanRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/terms-conditions': typeof TermsConditionsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ban': typeof BanRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/terms-conditions': typeof TermsConditionsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/ban': typeof BanRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/terms-conditions': typeof TermsConditionsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ban'
+  fullPaths: '/' | '/ban' | '/privacy-policy' | '/terms-conditions'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ban'
-  id: '__root__' | '/' | '/ban'
+  to: '/' | '/ban' | '/privacy-policy' | '/terms-conditions'
+  id: '__root__' | '/' | '/ban' | '/privacy-policy' | '/terms-conditions'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BanRoute: typeof BanRoute
+  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
+  TermsConditionsRoute: typeof TermsConditionsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms-conditions': {
+      id: '/terms-conditions'
+      path: '/terms-conditions'
+      fullPath: '/terms-conditions'
+      preLoaderRoute: typeof TermsConditionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy-policy': {
+      id: '/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ban': {
       id: '/ban'
       path: '/ban'
@@ -71,6 +105,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BanRoute: BanRoute,
+  PrivacyPolicyRoute: PrivacyPolicyRoute,
+  TermsConditionsRoute: TermsConditionsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
