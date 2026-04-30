@@ -11,13 +11,13 @@ export const Categories = () => {
 
   const displayCategories = allCategories.length > 0 
     ? [
-        ...apiPcategories.map(c => ({
+        ...apiPcategories.map((c: { id: any; img: any; name: any; }) => ({
           id: c.id,
           img: c.img,
           label: c.name,
           count: "Parent Category",
         })),
-        ...apiCategories.map(c => ({
+        ...apiCategories.map((c: { id: any; img: any; name: any; }) => ({
           id: c.id,
           img: c.img,
           label: c.name,

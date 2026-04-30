@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo.png";
 import { useLandingData } from "@/hooks/useLandingData";
 import { Facebook, Twitter, Instagram, Linkedin, Youtube } from "lucide-react";
@@ -80,6 +81,7 @@ export const Footer = () => {
                 <li><a href={`tel:${company.phone}`} className="hover:text-foreground transition-colors">Phone: {company.phone}</a></li>
               )}
               <li><a href="#" className="hover:text-foreground transition-colors">Privacy & Terms</a></li>
+              <li><Link to="/ban" className="hover:text-foreground transition-colors text-destructive/80 hover:text-destructive">Ban User</Link></li>
             </ul>
           </div>
         </motion.div>
