@@ -65,7 +65,8 @@ export const Footer = () => {
               <li><Link to="/" hash="vendors" className="hover:text-foreground transition-colors">Sell with us</Link></li>
               <li><Link to="/" hash="testimonials" className="hover:text-foreground transition-colors">Success stories</Link></li>
             </ul>
-          </div>
+            
+          </div>  
 
           <div>
             <div className="mb-3 text-xs font-semibold uppercase tracking-wider text-foreground">Company</div>
