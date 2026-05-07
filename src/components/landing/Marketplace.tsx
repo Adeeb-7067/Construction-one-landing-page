@@ -6,7 +6,7 @@ export const Marketplace = () => {
   const products = data?.recentProducts || [];
 
   return (
-    <section id="marketplace" className="relative py-32">
+    <section id="marketplace" className="relative py-12">
       <div className="mx-auto max-w-7xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -21,7 +21,7 @@ export const Marketplace = () => {
         </motion.div>
 
         {isLoading ? (
-          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="glass-strong animate-pulse rounded-3xl p-4 flex flex-col gap-5">
                 <div className="aspect-square w-full rounded-2xl bg-foreground/10" />
@@ -37,7 +37,7 @@ export const Marketplace = () => {
             <p className="text-xs mt-4 opacity-60">Please check console for CORS or network issues.</p>
           </div>
         ) : products.length > 0 ? (
-          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
             {products.map((p: any, i: number) => (
               <motion.div
                 key={p.productId}

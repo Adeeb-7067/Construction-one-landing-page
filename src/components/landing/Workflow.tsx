@@ -16,7 +16,7 @@ export const Workflow = () => {
   const ActiveIcon = nodes[active].icon;
 
   return (
-    <section id="workflow" className="relative py-32">
+    <section id="workflow" className="relative py-12">
       <div className="mx-auto max-w-7xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

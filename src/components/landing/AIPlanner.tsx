@@ -70,7 +70,7 @@ export const AIPlanner = () => {
   }, [result]);
 
   return (
-    <section id="planner" className="relative py-32">
+    <section id="planner" className="relative py-12">
       <div className="absolute inset-x-0 top-0 h-full opacity-40" style={{ background: "var(--gradient-radial)" }} />
       <div className="relative mx-auto max-w-5xl px-6">
         <motion.div
@@ -158,7 +158,7 @@ export const AIPlanner = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="mt-8 grid gap-4 md:grid-cols-3"
+              className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3"
             >
               {/* Cost card — span 2 */}
               <div className="glass-strong rounded-3xl p-6 md:col-span-2">

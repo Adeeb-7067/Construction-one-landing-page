@@ -39,10 +39,10 @@ export const Stats = () => {
   ];
 
   return (
-    <section className="relative border-y border-border py-24">
+    <section className="relative border-y border-border py-12">
       <div className="absolute inset-0 grid-pattern opacity-20" />
       <div className="relative mx-auto max-w-7xl px-6">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {displayStats.map((s, i) => (
             <motion.div
               key={s.label}

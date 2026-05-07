@@ -16,7 +16,9 @@ export const WhyChoose = () => {
     {
       icon: BadgeCheck,
       title: "Verified Vendors",
-      stat: stats?.totalVerifiedVendors ? `${stats.totalVerifiedVendors.toLocaleString()}+` : "1,000+",
+      stat: stats?.totalVerifiedVendors
+        ? `${stats.totalVerifiedVendors.toLocaleString()}+`
+        : "1,000+",
       desc: "Every vendor is GST-verified, with documents and track record reviewed by our team.",
     },
     {
@@ -34,7 +36,7 @@ export const WhyChoose = () => {
   ];
 
   return (
-    <section id="why" className="relative py-32">
+    <section id="why" className="relative py-12">
       <div className="absolute inset-0 grid-pattern opacity-40" />
       <div className="relative mx-auto max-w-7xl px-6">
         <motion.div
@@ -48,8 +50,8 @@ export const WhyChoose = () => {
             Built for the people who <span className="text-gradient">build India.</span>
           </h2>
           <p className="mt-5 text-muted-foreground">
-            Contractors, builders and homeowners trust us to source what they need —
-            quickly, cheaply and without headaches.
+            Contractors, builders and homeowners trust us to source what they need — quickly,
+            cheaply and without headaches.
           </p>
         </motion.div>
 

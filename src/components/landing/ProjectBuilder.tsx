@@ -39,7 +39,7 @@ export const ProjectBuilder = () => {
   }, [type, area, budget]);
 
   return (
-    <section className="relative py-32">
+    <section className="relative py-12">
       <div className="mx-auto max-w-7xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -140,7 +140,7 @@ export const ProjectBuilder = () => {
           </div>
 
           {/* Output panels */}
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
             {[
               { title: "Materials", icon: Truck, items: data.materials, color: "from-primary/20" },
               { title: "Services", icon: HardHat, items: data.services, color: "from-blue-500/20" },

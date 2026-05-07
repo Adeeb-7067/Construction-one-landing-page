@@ -93,7 +93,7 @@ export const VendorSignup = () => {
   };
 
   return (
-    <section id="vendors" className="relative py-32">
+    <section id="vendors" className="relative py-12">
       <div className="mx-auto max-w-7xl px-6">
         <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:items-center">
           {/* Left pitch */}
@@ -165,7 +165,7 @@ export const VendorSignup = () => {
               </motion.div>
             ) : (
               <form onSubmit={onSubmit} className="space-y-4" noValidate>
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-2">
                   <Field label="Business name" error={errors.businessName}>
                     <input
                       value={form.businessName}
@@ -185,7 +185,7 @@ export const VendorSignup = () => {
                     />
                   </Field>
                 </div>
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-2">
                   <Field label="Email" error={errors.email}>
                     <input
                       type="email"
@@ -207,7 +207,7 @@ export const VendorSignup = () => {
                     />
                   </Field>
                 </div>
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-2">
                   <Field label="City" error={errors.city}>
                     <input
                       value={form.city}

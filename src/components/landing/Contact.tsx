@@ -40,7 +40,7 @@ export const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="relative py-32">
+    <section id="contact" className="relative py-12">
       <div className="mx-auto max-w-7xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -54,7 +54,7 @@ export const Contact = () => {
           </h2>
         </motion.div>
 
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-5 md:grid-cols-2 lg:grid-cols-4">
           {channels.map((c, i) => {
             const Icon = c.icon;
             const inner = (

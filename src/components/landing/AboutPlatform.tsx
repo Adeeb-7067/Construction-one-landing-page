@@ -34,7 +34,7 @@ export const AboutPlatform = () => {
   const company = data?.company;
 
   return (
-    <section id="about" className="relative py-32">
+    <section id="about" className="relative py-12">
       <div className="mx-auto max-w-7xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

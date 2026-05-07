@@ -27,7 +27,7 @@ export const Categories = () => {
     : [];
 
   return (
-    <section className="relative py-20">
+    <section className="relative py-12">
       <div className="mx-auto max-w-7xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
