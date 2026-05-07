@@ -13,7 +13,7 @@ function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => vo
             className="h-8 w-8 text-destructive"   
             fill="none"
             viewBox="0 0 24 24"
-            stroke="currentColor"
+            stroke="currentColor"  
             strokeWidth={2}
           >
             <path

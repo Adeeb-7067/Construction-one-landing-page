@@ -1,11 +1,13 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, ShoppingCart, Store, ChevronDown } from "lucide-react";
+import { ArrowRight, ShoppingCart, Store, ChevronDown, Menu, X } from "lucide-react";
 import { toast } from "sonner";
 import heroImg from "@/assets/hero-construction.jpg";
 import logo from "@/assets/logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useLandingData } from "@/hooks/useLandingData";
+import { DownloadAppModal } from "./DownloadAppModal";
 
 const Particles = () => {
   const particles = Array.from({ length: 30 });
@@ -55,7 +57,7 @@ const RippleButton = ({
     ripple.style.cssText = `position:absolute;border-radius:50%;background:currentColor;opacity:.35;pointer-events:none;width:${size}px;height:${size}px;left:${e.clientX - rect.left - size / 2}px;top:${e.clientY - rect.top - size / 2}px;transform:scale(0);animation:ripple .7s ease-out;`;
     btn.appendChild(ripple);
     setTimeout(() => ripple.remove(), 700);
-    
+
     if (onClick) onClick();
   };
 
@@ -75,10 +77,10 @@ const RippleButton = ({
   );
 };
 
-
 export const Hero = () => {
   const { data } = useLandingData();
   const company = data?.company;
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <section className="relative min-h-screen overflow-hidden">
@@ -109,22 +111,60 @@ export const Hero = () => {
       >
         <Link to="/" className="flex items-center gap-2">
           {company?.headerLogo ? (
-            <img src={company.headerLogo} alt={company.name || "Construction One"} className="h-8 w-auto" />
+            <img
+              src={company.headerLogo}
+              alt={company.name || "Construction One"}
+              className="h-8 w-auto"
+            />
           ) : (
             <img src={logo} alt="Construction One" className="h-8 w-auto" />
           )}
         </Link>
         <div className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
-          <Link to="/" hash="about" className="hover:text-foreground transition-colors">About</Link>
-          <Link to="/" hash="why" className="hover:text-foreground transition-colors">Why us</Link>
-          <Link to="/" hash="marketplace" className="hover:text-foreground transition-colors">Marketplace</Link>
-          <Link to="/" hash="vendors" className="hover:text-foreground transition-colors">Sell with us</Link>
-          <Link to="/" hash="contact" className="hover:text-foreground transition-colors">Contact</Link>
+          <Link to="/" hash="about" className="hover:text-foreground transition-colors">
+            About
+          </Link>
+          <Link to="/" hash="why" className="hover:text-foreground transition-colors">
+            Why us
+          </Link>
+          <Link to="/" hash="marketplace" className="hover:text-foreground transition-colors">
+            Marketplace
+          </Link>
+          <Link to="/" hash="vendors" className="hover:text-foreground transition-colors">
+            Sell with us
+          </Link>
+          <Link to="/" hash="contact" className="hover:text-foreground transition-colors">
+            Contact
+          </Link>
         </div>
         <div className="flex items-center gap-2">
+          <DownloadAppModal />
           <ThemeToggle />
+          <button
+            className="md:hidden ml-2 inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground focus:outline-none"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
       </motion.nav>
+
+      {/* Mobile Nav */}
+      {mobileMenuOpen && (
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="absolute left-0 right-0 top-full z-20 mt-2 bg-background/95 backdrop-blur-md p-4 border-b border-border shadow-lg md:hidden"
+        >
+          <div className="flex flex-col space-y-4 text-base font-medium">
+            <Link to="/" hash="about" onClick={() => setMobileMenuOpen(false)}>About</Link>
+            <Link to="/" hash="why" onClick={() => setMobileMenuOpen(false)}>Why us</Link>
+            <Link to="/" hash="marketplace" onClick={() => setMobileMenuOpen(false)}>Marketplace</Link>
+            <Link to="/" hash="vendors" onClick={() => setMobileMenuOpen(false)}>Sell with us</Link>
+            <Link to="/" hash="contact" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
+          </div>
+        </motion.div>
+      )}
 
       {/* Hero content */}
       <div className="relative z-10 mx-auto flex min-h-[calc(100vh-100px)] max-w-7xl flex-col justify-center px-6 pb-20">
@@ -135,19 +175,19 @@ export const Hero = () => {
           className="mb-6 inline-flex w-fit items-center gap-2 rounded-full glass px-4 py-1.5 text-xs tracking-wide text-muted-foreground"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-          {company?.tagline ? company.tagline.toUpperCase() : "INDIA'S MARKETPLACE FOR CONSTRUCTION MATERIALS"}
+          {company?.tagline
+            ? company.tagline.toUpperCase()
+            : "INDIA'S MARKETPLACE FOR CONSTRUCTION MATERIALS"}
         </motion.div>
 
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7, duration: 0.8 }}
-          className="font-display text-5xl font-bold leading-[1.05] tracking-tighter md:text-7xl lg:text-[8rem]"
+          className="font-display text-4xl font-bold leading-[1.05] tracking-tighter sm:text-5xl md:text-6xl lg:text-[7rem]"
         >
           {company?.title ? (
-            <>
-              {company.title}
-            </>
+            <>{company.title}</>
           ) : (
             <>
               Cement.
@@ -165,7 +205,8 @@ export const Hero = () => {
           transition={{ delay: 1, duration: 0.6 }}
           className="mt-8 max-w-xl text-lg text-muted-foreground"
         >
-          {company?.paragraph || "Order cement, TMT bars, bricks, sand, tiles and more from verified vendors near you — at the best price, delivered straight to your site."}
+          {company?.paragraph ||
+            "Order cement, TMT bars, bricks, sand, tiles and more from verified vendors near you — at the best price, delivered straight to your site."}
         </motion.p>
 
         <motion.div
@@ -174,16 +215,20 @@ export const Hero = () => {
           transition={{ delay: 1.2, duration: 0.6 }}
           className="mt-10 flex flex-wrap items-center gap-4"
         >
-          <RippleButton 
-            icon={ShoppingCart} 
-            onClick={() => toast("Coming soon!", { description: "Our shop is currently under construction." })}
+          <RippleButton
+            icon={ShoppingCart}
+            onClick={() =>
+              toast("Coming soon!", { description: "Our shop is currently under construction." })
+            }
           >
             Shop Materials
           </RippleButton>
-          <RippleButton 
-            variant="ghost" 
+          <RippleButton
+            variant="ghost"
             icon={Store}
-            onClick={() => document.getElementById("vendors")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() =>
+              document.getElementById("vendors")?.scrollIntoView({ behavior: "smooth" })
+            }
           >
             Sell on Construction One
           </RippleButton>
