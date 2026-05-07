@@ -20,13 +20,13 @@ export const DownloadAppModal = () => {
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="gap-2 rounded-full border-primary/20 bg-primary/5 hover:bg-primary/10"
+          className="gap-2 rounded-full border-primary/20 bg-primary/5 hover:bg-primary/10 "
         >
           <Download className="h-4 w-4" />
           <span className="hidden sm:inline">Download App</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px] w-[95vw] max-h-[90dvh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[600px] w-[95vw] max-h-[90dvh] overflow-y-auto hide-scrollbar">
         <DialogHeader>
           <DialogTitle className="text-2xl text-center">Download Construction One</DialogTitle>
           <DialogDescription className="text-center text-lg mt-2">
